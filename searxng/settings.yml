@@ -1,0 +1,21 @@
+server:
+  secret_key: "CHANGE_ME_32_CHARS_1234567890123"
+  base_url: http://truenas.ossevoort.net/search
+  image_proxy: true
+  method: GET
+  default_output_format: json
+
+ui:
+  static_use_hash: true
+
+redis:
+  url: redis://searxng-redis:6379/0
+
+search:
+  safe_search: 0
+  autocomplete: "duckduckgo"
+
+# Uncomment to disable unneeded engines or add API keys.
+# engines:
+#   - name: duckduckgo
+#     disabled: false

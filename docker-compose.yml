@@ -1,0 +1,129 @@
+version: "3.9"
+
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: proxy
+    restart: unless-stopped
+    depends_on:
+      - openwebui
+      - searxng
+      - comfyui
+      - ollama
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - appnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"  # direct API if you want
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    volumes:
+      - /z1/data/apps/ollama:/root/.ollama
+    networks:
+      - appnet
+    deploy:
+      resources:
+        limits:
+          memory: 10g
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    restart: unless-stopped
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - ENABLE_RAG_EMBEDDINGS=false
+    volumes:
+      - /z1/data/apps/openwebui:/app/backend/data
+    networks:
+      - appnet
+    # Uncomment to expose directly (Portainer healthchecks etc.)
+    # ports:
+    #   - "3000:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    environment:
+      - BASE_URL=http://truenas.ossevoort.net/search
+      - SEARXNG_URL_PREFIX=/search
+      - SEARXNG_REDIS_URL=redis://searxng-redis:6379/0
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+      - /z1/data/apps/searxng/cache:/var/cache/searxng
+    networks:
+      - appnet
+      - searxng_net
+    depends_on:
+      - searxng-redis
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+
+  searxng-redis:
+    image: redis:7-alpine
+    container_name: searxng-redis
+    restart: unless-stopped
+    networks:
+      - searxng_net
+    volumes:
+      - /z1/data/apps/searxng/redis:/data
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  comfyui:
+    image: ghcr.io/ai-dock/comfyui:latest-cuda
+    container_name: comfyui
+    restart: unless-stopped
+    environment:
+      - WORKSPACE=/workspace
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      # Pin a specific tag if you prefer CPU-only: ghcr.io/ai-dock/comfyui:cpu-22.04
+      # Or for AMD ROCm: ghcr.io/ai-dock/comfyui:latest-rocm
+    volumes:
+      - /z1/data/apps/comfyui/workspace:/workspace
+    networks:
+      - appnet
+    deploy:
+      resources:
+        limits:
+          memory: 10g
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+networks:
+  appnet:
+    driver: bridge
+  searxng_net:
+    driver: bridge
