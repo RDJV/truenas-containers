@@ -71,3 +71,14 @@ Note: On a single Docker host, some Portainer versions ignore `deploy.*` limits;
 
 ## TLS (optional extras)
 - Provide your own certs by placing them in `/mnt/z1/truenas-containers/data/letsencrypt/live/truenas.ossevoort.net/` and restart nginx.
+
+## Keep in sync with GitHub
+- Git remote: `https://github.com/RDJV/truenas-containers.git`
+- Update on the server before redeploying:
+  ```
+  cd /mnt/z1/truenas-containers
+  git pull
+  docker compose pull    # optional, to refresh images
+  docker compose up -d   # or redeploy via Portainer
+  ```
+- Portainer option: create the stack from the Git repo URL and enable “Auto-update” so Portainer pulls the latest on webhook/interval.
