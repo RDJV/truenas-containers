@@ -7,6 +7,7 @@ server:
   image_proxy: true
   method: GET
   default_output_format: json
+  public_instance: true
   trusted_proxies:
     - 172.0.0.0/12
 
@@ -27,4 +28,3 @@ limiter:
   botdetection: false
   ip_limit: false
   search_limit: false
-
