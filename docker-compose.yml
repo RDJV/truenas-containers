@@ -34,7 +34,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
     volumes:
-      - /z1/data/apps/ollama:/root/.ollama
+      - /mnt/z1/truenas-containers/data/ollama:/root/.ollama
     networks:
       - appnet
     deploy:
@@ -55,7 +55,7 @@ services:
       - OLLAMA_BASE_URL=http://ollama:11434
       - ENABLE_RAG_EMBEDDINGS=false
     volumes:
-      - /z1/data/apps/openwebui:/app/backend/data
+      - /mnt/z1/truenas-containers/data/openwebui:/app/backend/data
     networks:
       - appnet
     # Uncomment to expose directly (Portainer healthchecks etc.)
@@ -76,7 +76,7 @@ services:
       - SEARXNG_REDIS_URL=redis://searxng-redis:6379/0
     volumes:
       - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
-      - /z1/data/apps/searxng/cache:/var/cache/searxng
+      - /mnt/z1/truenas-containers/data/searxng/cache:/var/cache/searxng
     networks:
       - appnet
       - searxng_net
@@ -94,7 +94,7 @@ services:
     networks:
       - searxng_net
     volumes:
-      - /z1/data/apps/searxng/redis:/data
+      - /mnt/z1/truenas-containers/data/searxng/redis:/data
     deploy:
       resources:
         limits:
@@ -111,7 +111,7 @@ services:
       # Pin a specific tag if you prefer CPU-only: ghcr.io/ai-dock/comfyui:cpu-22.04
       # Or for AMD ROCm: ghcr.io/ai-dock/comfyui:latest-rocm
     volumes:
-      - /z1/data/apps/comfyui/workspace:/workspace
+      - /mnt/z1/truenas-containers/data/comfyui/workspace:/workspace
     networks:
       - appnet
     deploy:
