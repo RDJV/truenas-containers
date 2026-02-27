@@ -1,3 +1,8 @@
+﻿# Minimal validated SearXNG config
+
+general:
+  instance_name: "SearXNG"
+
 server:
   secret_key: "CHANGE_ME_32_CHARS_1234567890123"
   base_url: http://truenas.ossevoort.local/search/
@@ -15,7 +20,6 @@ search:
   safe_search: 0
   autocomplete: "duckduckgo"
 
-# Uncomment to disable unneeded engines or add API keys.
-# engines:
-#   - name: duckduckgo
-#     disabled: false
+engines:
+  - name: duckduckgo
+    disabled: false
