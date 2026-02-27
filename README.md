@@ -52,11 +52,16 @@ Note: On a single Docker host, some Portainer versions ignore `deploy.*` limits;
 - Renewal: the certbot service runs `certbot renew` every 12h. Reload nginx after renewal: `docker compose exec nginx nginx -s reload` (or schedule a monthly reload).
 
 ## Quick start (Portainer stack)
-1) Ensure `/mnt/z1/truenas-containers/data/...` directories exist and are writable.
-2) In Portainer: Stacks -> **Add stack** -> **Upload** -> select `docker-compose.yml` -> **Deploy the stack**.
-3) Point DNS `truenas.ossevoort.net` to the TrueNAS Docker host IP and open ports 80/443 to the host for ACME.
-4) Run the one-time certbot command above to fetch certs, then restart nginx.
-5) Browse:
+1) Clone on the host (recommended path):
+   ```
+   git clone https://github.com/RDJV/truenas-containers.git /mnt/z1/truenas-containers
+   cd /mnt/z1/truenas-containers
+   ```
+2) Ensure `/mnt/z1/truenas-containers/data/...` directories exist and are writable.
+3) In Portainer: Stacks -> **Add stack** -> **Upload** -> select `docker-compose.yml` -> **Deploy the stack**.
+4) Point DNS `truenas.ossevoort.net` to the TrueNAS Docker host IP and open ports 80/443 to the host for ACME.
+5) Run the one-time certbot command above to fetch certs, then restart nginx.
+6) Browse:
    - https://truenas.ossevoort.net/truenas/
    - https://truenas.ossevoort.net/chat/
    - https://truenas.ossevoort.net/search/
