@@ -13,7 +13,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - /mnt/z1/truenas-containers/nginx/conf.d:/etc/nginx/conf.d:ro
     networks:
       - appnet
     extra_hosts:
@@ -75,7 +75,7 @@ services:
       - SEARXNG_URL_PREFIX=/search
       - SEARXNG_REDIS_URL=redis://searxng-redis:6379/0
     volumes:
-      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+      - /mnt/z1/truenas-containers/searxng/settings.yml:/etc/searxng/settings.yml:ro
       - /mnt/z1/truenas-containers/data/searxng/cache:/var/cache/searxng
     networks:
       - appnet
