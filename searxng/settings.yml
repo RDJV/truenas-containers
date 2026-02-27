@@ -1,7 +1,5 @@
-﻿# Minimal validated SearXNG config
-
-general:
-  instance_name: "SearXNG"
+﻿# Minimal overrides; rely on defaults elsewhere
+use_default_settings: true
 
 server:
   secret_key: "CHANGE_ME_32_CHARS_1234567890123"
@@ -19,7 +17,3 @@ redis:
 search:
   safe_search: 0
   autocomplete: "duckduckgo"
-
-engines:
-  - name: duckduckgo
-    disabled: false
