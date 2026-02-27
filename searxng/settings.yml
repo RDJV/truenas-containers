@@ -22,3 +22,9 @@ search:
 
 botdetection:
   enabled: false
+
+limiter:
+  botdetection: false
+  ip_limit: false
+  search_limit: false
+
