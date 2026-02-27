@@ -6,7 +6,7 @@ Services: OpenWebUI (LLM UI), Ollama (models runtime), SearxNG (meta search), Co
 - Domain: `truenas.ossevoort.local`
 - Paths:
   - `/chat/` -> OpenWebUI
-  - `/search/` -> SearxNG (JSON default for API callers like OpenWebUI)
+  - `/searxng/` -> SearxNG (JSON default for API callers like OpenWebUI)
   - `/comfy/` -> ComfyUI
   - `/truenas/` -> TrueNAS UI (prefers 8443 https, falls back to 8080 http)
   - `/portainer/` -> Portainer UI (proxied to host port 9443)
@@ -54,7 +54,7 @@ Note: On a single Docker host, some Portainer versions ignore `deploy.*` limits;
 6) Browse:
    - https://truenas.ossevoort.local/truenas/
    - https://truenas.ossevoort.local/chat/
-   - https://truenas.ossevoort.local/search/
+   - https://truenas.ossevoort.local/searxng/
    - https://truenas.ossevoort.local/comfy/
    - https://truenas.ossevoort.local/portainer/
 
