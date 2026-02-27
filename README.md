@@ -15,8 +15,9 @@ Services: OpenWebUI (LLM UI), Ollama (models runtime), SearxNG (meta search), Co
 
 ## Files
 - `docker-compose.yml`
-- `nginx/conf.d/default.conf` (path-based routing)
+- `nginx/conf.d/default.conf` (path-based routing + HTTPS + ACME webroot)
 - `searxng/settings.yml` (set your own `secret_key`)
+- `portainer-remap.sh` (helper to run Portainer on 9443/9000)
 
 ## Storage (bind mounts on TrueNAS)
 - `/mnt/z1/truenas-containers/data/ollama` -> Ollama models
@@ -24,6 +25,7 @@ Services: OpenWebUI (LLM UI), Ollama (models runtime), SearxNG (meta search), Co
 - `/mnt/z1/truenas-containers/data/comfyui/workspace` -> ComfyUI models/outputs/custom nodes
 - `/mnt/z1/truenas-containers/data/searxng/cache` -> SearxNG cache
 - `/mnt/z1/truenas-containers/data/searxng/redis` -> Redis data
+- `/mnt/z1/truenas-containers/data/letsencrypt` (named volume in Docker) -> TLS certs (mounted into nginx/certbot)
 
 ## Resource limits (per service)
 - nginx: 512m RAM
@@ -37,17 +39,30 @@ Note: On a single Docker host, some Portainer versions ignore `deploy.*` limits;
 ## GPU requirements
 - Host must have NVIDIA drivers and `nvidia-container-toolkit` configured. Env vars and deploy GPU reservations are already set. If GPUs don’t appear, set Docker default runtime to `nvidia` or enable `--gpus all` for services in Portainer.
 
+## TLS/ACME (Let’s Encrypt)
+- ACME HTTP-01 handled via webroot at `nginx/www` mapped to `/var/www/certbot`.
+- Certs live in Docker volume `letsencrypt` mounted at `/etc/letsencrypt` in nginx and certbot.
+- Obtain initial cert (once) on the host:
+  ```
+  docker compose run --rm certbot certonly --webroot \
+    -w /var/www/certbot \
+    -d truenas.ossevoort.net \
+    --email YOUR_EMAIL@example.com --agree-tos --no-eff-email
+  ```
+- Renewal: the certbot service runs `certbot renew` every 12h. Reload nginx after renewal: `docker compose exec nginx nginx -s reload` (or schedule a monthly reload).
+
 ## Quick start (Portainer stack)
 1) Ensure `/mnt/z1/truenas-containers/data/...` directories exist and are writable.
 2) In Portainer: Stacks -> **Add stack** -> **Upload** -> select `docker-compose.yml` -> **Deploy the stack**.
-3) Point DNS/hosts `truenas.ossevoort.net` to the TrueNAS Docker host IP.
-4) Browse:
-   - https://truenas.ossevoort.net/truenas/ (or http if cert not trusted)
-   - http://truenas.ossevoort.net/chat/
-   - http://truenas.ossevoort.net/search/
-   - http://truenas.ossevoort.net/comfy/
-   - http://truenas.ossevoort.net/ollama/
+3) Point DNS `truenas.ossevoort.net` to the TrueNAS Docker host IP and open ports 80/443 to the host for ACME.
+4) Run the one-time certbot command above to fetch certs, then restart nginx.
+5) Browse:
+   - https://truenas.ossevoort.net/truenas/
+   - https://truenas.ossevoort.net/chat/
+   - https://truenas.ossevoort.net/search/
+   - https://truenas.ossevoort.net/comfy/
+   - https://truenas.ossevoort.net/ollama/
    - https://truenas.ossevoort.net/portainer/
 
-## TLS (optional)
-- Terminate TLS in Nginx by adding cert/key and `listen 443 ssl;` blocks in `nginx/conf.d/default.conf`. If you use another reverse proxy (Traefik/Certbot on TrueNAS), keep this Nginx internal.
+## TLS (optional extras)
+- Provide your own certs by placing them in `/mnt/z1/truenas-containers/data/letsencrypt/live/truenas.ossevoort.net/` and restart nginx.

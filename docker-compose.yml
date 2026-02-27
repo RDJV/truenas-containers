@@ -10,10 +10,14 @@ services:
       - searxng
       - comfyui
       - ollama
+      - certbot
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/www:/var/www/certbot:ro
+      - letsencrypt:/etc/letsencrypt:ro
     networks:
       - appnet
     extra_hosts:
@@ -99,6 +103,15 @@ services:
       resources:
         limits:
           memory: 512m
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: certbot
+    restart: unless-stopped
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - ./nginx/www:/var/www/certbot
+    command: sh -c "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h; done"
 
   comfyui:
     image: ghcr.io/ai-dock/comfyui:latest-cuda
