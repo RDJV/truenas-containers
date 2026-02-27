@@ -39,9 +39,8 @@ Note: On a single Docker host, some Portainer versions ignore `deploy.*` limits;
 ## GPU requirements
 - Host must have NVIDIA drivers and `nvidia-container-toolkit` configured. Env vars and deploy GPU reservations are already set. If GPUs don’t appear, set Docker default runtime to `nvidia` or enable `--gpus all` for services in Portainer.
 
-## TLS/ACME (Let’s Encrypt)
-- Note: Let’s Encrypt will not issue certificates for `.local` domains. Keep using HTTP internally or provide your own certificates from an internal CA and place them in `/mnt/z1/truenas-containers/data/letsencrypt/live/truenas.ossevoort.local/`.
-- ACME webroot is wired (for real domains) at `nginx/www` -> `/var/www/certbot`. If you later use a public domain, run certbot with that domain name and reload nginx.
+## TLS
+- TLS removed in this setup; everything runs over HTTP on port 80 behind your internal network. If you later move to a public domain, reintroduce TLS/certbot and update nginx accordingly.
 
 ## Quick start (Portainer stack)
 1) Clone on the host (recommended path):
