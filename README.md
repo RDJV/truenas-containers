@@ -8,7 +8,6 @@ Services: OpenWebUI (LLM UI), Ollama (models runtime), SearxNG (meta search), Co
   - `/chat/` -> OpenWebUI
   - `/search/` -> SearxNG (JSON default for API callers like OpenWebUI)
   - `/comfy/` -> ComfyUI
-  - `/ollama/` -> Ollama API (optional)
   - `/truenas/` -> TrueNAS UI (prefers 8443 https, falls back to 8080 http)
   - `/portainer/` -> Portainer UI (proxied to host port 9443)
   - `/` redirects to `/chat/`
@@ -53,12 +52,11 @@ Note: On a single Docker host, some Portainer versions ignore `deploy.*` limits;
 4) Point DNS `truenas.ossevoort.net` to the TrueNAS Docker host IP and open ports 80/443 to the host for ACME.
 5) Run the one-time certbot command above to fetch certs, then restart nginx.
 6) Browse:
-    - https://truenas.ossevoort.local/truenas/
-    - https://truenas.ossevoort.local/chat/
-    - https://truenas.ossevoort.local/search/
-    - https://truenas.ossevoort.local/comfy/
-    - https://truenas.ossevoort.local/ollama/
-    - https://truenas.ossevoort.local/portainer/
+   - https://truenas.ossevoort.local/truenas/
+   - https://truenas.ossevoort.local/chat/
+   - https://truenas.ossevoort.local/search/
+   - https://truenas.ossevoort.local/comfy/
+   - https://truenas.ossevoort.local/portainer/
 
 ## TLS (optional extras)
 - Provide your own certs by placing them in `/mnt/z1/truenas-containers/data/letsencrypt/live/truenas.ossevoort.net/` and restart nginx.
