@@ -15,7 +15,12 @@ services:
     volumes:
       - /mnt/z1/truenas-containers/nginx/conf.d:/etc/nginx/conf.d:ro
     networks:
-      - appnet
+      appnet:
+        aliases:
+          - openwebui
+          - searxng
+          - comfyui
+          - ollama
     extra_hosts:
       - "host.docker.internal:host-gateway"
     deploy:
@@ -57,7 +62,9 @@ services:
     volumes:
       - /mnt/z1/truenas-containers/data/openwebui:/app/backend/data
     networks:
-      - appnet
+      appnet:
+        aliases:
+          - openwebui
     # Uncomment to expose directly (Portainer healthchecks etc.)
     # ports:
     #   - "3000:8080"
@@ -78,8 +85,12 @@ services:
       - /mnt/z1/truenas-containers/searxng/settings.yml:/etc/searxng/settings.yml:ro
       - /mnt/z1/truenas-containers/data/searxng/cache:/var/cache/searxng
     networks:
-      - appnet
-      - searxng_net
+      appnet:
+        aliases:
+          - searxng
+      searxng_net:
+        aliases:
+          - searxng
     depends_on:
       - searxng-redis
     deploy:
@@ -113,7 +124,9 @@ services:
     volumes:
       - /mnt/z1/truenas-containers/data/comfyui/workspace:/workspace
     networks:
-      - appnet
+      appnet:
+        aliases:
+          - comfyui
     deploy:
       resources:
         limits:
