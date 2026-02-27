@@ -1,5 +1,4 @@
-﻿# Minimal overrides; rely on defaults elsewhere
-use_default_settings: true
+﻿use_default_settings: true
 
 server:
   secret_key: "CHANGE_ME_32_CHARS_1234567890123"
@@ -25,10 +24,5 @@ botdetection:
   enabled: false
 
 limiter:
-  botdetection: false
-  ip_limit: false
-  search_limit: false
-  # Disable all limiter rules
-  min_interval: 0
-  max_results: 0
-  burst: 0
+  # fully disable limiter
+  enabled: false
