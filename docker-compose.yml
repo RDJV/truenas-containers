@@ -140,3 +140,6 @@ networks:
     driver: bridge
   searxng_net:
     driver: bridge
+
+volumes:
+  letsencrypt:
