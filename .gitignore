@@ -10,6 +10,7 @@ __pycache__/
 comfyui/workspace/
 searxng/cache/
 searxng/redis/
+data/
 
 # Env files
 .env
