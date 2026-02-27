@@ -112,15 +112,13 @@ services:
           memory: 512m
 
   comfyui:
-    image: ghcr.io/ai-dock/comfyui:latest-cuda
+    image: ghcr.io/clsferguson/comfyui-docker:latest
     container_name: comfyui
     restart: unless-stopped
     environment:
-      - WORKSPACE=/workspace
+      - CLI_ARGS=--listen 0.0.0.0
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
-      # Pin a specific tag if you prefer CPU-only: ghcr.io/ai-dock/comfyui:cpu-22.04
-      # Or for AMD ROCm: ghcr.io/ai-dock/comfyui:latest-rocm
     volumes:
       - /mnt/z1/truenas-containers/data/comfyui/workspace:/workspace
     networks:
