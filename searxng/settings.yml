@@ -1,4 +1,4 @@
-﻿use_default_settings: true
+﻿use_default_settings: false
 
 server:
   secret_key: "CHANGE_ME_32_CHARS_1234567890123"
@@ -23,6 +23,5 @@ search:
 botdetection:
   enabled: false
 
-limiter:
-  # fully disable limiter
-  enabled: false
+limiter:\n  enabled: false
+
