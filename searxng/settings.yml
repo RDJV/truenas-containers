@@ -28,3 +28,7 @@ limiter:
   botdetection: false
   ip_limit: false
   search_limit: false
+  # Disable all limiter rules
+  min_interval: 0
+  max_results: 0
+  burst: 0
