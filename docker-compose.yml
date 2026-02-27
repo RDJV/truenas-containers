@@ -75,7 +75,7 @@ services:
     container_name: searxng
     restart: unless-stopped
     environment:
-      - BASE_URL=http://truenas.ossevoort.net/search
+      - BASE_URL=http://truenas.ossevoort.local/search
       - SEARXNG_URL_PREFIX=/search
       - SEARXNG_REDIS_URL=redis://searxng-redis:6379/0
     volumes:

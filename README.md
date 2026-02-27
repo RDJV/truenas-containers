@@ -3,7 +3,7 @@
 Services: OpenWebUI (LLM UI), Ollama (models runtime), SearxNG (meta search), ComfyUI (SD workflows), and Nginx as the single entrypoint.
 
 ## Routing (single domain)
-- Domain: `truenas.ossevoort.net`
+- Domain: `truenas.ossevoort.local`
 - Paths:
   - `/chat/` -> OpenWebUI
   - `/search/` -> SearxNG (JSON default for API callers like OpenWebUI)
@@ -40,16 +40,8 @@ Note: On a single Docker host, some Portainer versions ignore `deploy.*` limits;
 - Host must have NVIDIA drivers and `nvidia-container-toolkit` configured. Env vars and deploy GPU reservations are already set. If GPUs don’t appear, set Docker default runtime to `nvidia` or enable `--gpus all` for services in Portainer.
 
 ## TLS/ACME (Let’s Encrypt)
-- ACME HTTP-01 handled via webroot at `nginx/www` mapped to `/var/www/certbot`.
-- Certs live in Docker volume `letsencrypt` mounted at `/etc/letsencrypt` in nginx and certbot.
-- Obtain initial cert (once) on the host:
-  ```
-  docker compose run --rm certbot certonly --webroot \
-    -w /var/www/certbot \
-    -d truenas.ossevoort.net \
-    --email YOUR_EMAIL@example.com --agree-tos --no-eff-email
-  ```
-- Renewal: the certbot service runs `certbot renew` every 12h. Reload nginx after renewal: `docker compose exec nginx nginx -s reload` (or schedule a monthly reload).
+- Note: Let’s Encrypt will not issue certificates for `.local` domains. Keep using HTTP internally or provide your own certificates from an internal CA and place them in `/mnt/z1/truenas-containers/data/letsencrypt/live/truenas.ossevoort.local/`.
+- ACME webroot is wired (for real domains) at `nginx/www` -> `/var/www/certbot`. If you later use a public domain, run certbot with that domain name and reload nginx.
 
 ## Quick start (Portainer stack)
 1) Clone on the host (recommended path):
@@ -62,12 +54,12 @@ Note: On a single Docker host, some Portainer versions ignore `deploy.*` limits;
 4) Point DNS `truenas.ossevoort.net` to the TrueNAS Docker host IP and open ports 80/443 to the host for ACME.
 5) Run the one-time certbot command above to fetch certs, then restart nginx.
 6) Browse:
-   - https://truenas.ossevoort.net/truenas/
-   - https://truenas.ossevoort.net/chat/
-   - https://truenas.ossevoort.net/search/
-   - https://truenas.ossevoort.net/comfy/
-   - https://truenas.ossevoort.net/ollama/
-   - https://truenas.ossevoort.net/portainer/
+    - https://truenas.ossevoort.local/truenas/
+    - https://truenas.ossevoort.local/chat/
+    - https://truenas.ossevoort.local/search/
+    - https://truenas.ossevoort.local/comfy/
+    - https://truenas.ossevoort.local/ollama/
+    - https://truenas.ossevoort.local/portainer/
 
 ## TLS (optional extras)
 - Provide your own certs by placing them in `/mnt/z1/truenas-containers/data/letsencrypt/live/truenas.ossevoort.net/` and restart nginx.
