@@ -3,7 +3,7 @@ use_default_settings: true
 
 server:
   secret_key: "CHANGE_ME_32_CHARS_1234567890123"
-  base_url: http://truenas.ossevoort.local/searxng/
+  base_url: http://searxng:8080/
   image_proxy: true
   method: GET
   default_output_format: json
