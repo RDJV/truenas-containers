@@ -6,16 +6,9 @@ server:
   image_proxy: true
   method: GET
   default_output_format: json
-  public_instance: true
+  public_instance: false
   trusted_proxies:
     - 172.0.0.0/12
 
-ui:
-  static_use_hash: true
-
-redis:
-  url: redis://searxng-redis:6379/0
-
-search:
-  safe_search: 0
-  autocomplete: "duckduckgo"
+botdetection:
+  enabled: false
