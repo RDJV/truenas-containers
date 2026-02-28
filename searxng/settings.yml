@@ -26,3 +26,5 @@ auth:
 
 botdetection:
   enabled: false
+
+limiter: false
