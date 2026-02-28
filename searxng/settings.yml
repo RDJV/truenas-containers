@@ -13,3 +13,4 @@ server:
 botdetection:
   enabled: false
 
+limiter: false
