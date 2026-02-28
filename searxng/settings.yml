@@ -10,7 +10,19 @@ server:
   trusted_proxies:
     - 172.0.0.0/12
 
+ui:
+  static_use_hash: true
+
+redis:
+  url: redis://searxng-redis:6379/0
+
+search:
+  safe_search: 0
+  autocomplete: "duckduckgo"
+
+auth:
+  query_tokens:
+    - "d2734b688f4d698aa861c2f404234e38fda6ae4a7e57c33e192bde49cf1ad8cd"
+
 botdetection:
   enabled: false
-
-limiter: false
